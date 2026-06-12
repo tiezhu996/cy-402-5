@@ -7,7 +7,11 @@
     "dev": "vite --host 0.0.0.0 --port 28031",
     "build": "tsc -p tsconfig.json && vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "preview": "vite preview --host 0.0.0.0 --port 28031"
+    "preview": "vite preview --host 0.0.0.0 --port 28031",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:filter-bar": "vitest run src/components/common/FilterBar.test.tsx",
+    "test:filter-state": "vitest run src/components/common/filter-bar-state.test.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
@@ -20,9 +24,14 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/testing-library__react": "^10.0.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^29.1.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
     "vitest": "^4.1.8"
