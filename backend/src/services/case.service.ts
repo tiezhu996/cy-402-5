@@ -28,7 +28,13 @@ export async function listCases(filters: CaseFilters) {
         filters.startDate || filters.endDate
           ? {
               gte: filters.startDate ? new Date(filters.startDate) : undefined,
-              lt: filters.endDate ? new Date(filters.endDate) : undefined
+              lt: filters.endDate
+                ? (() => {
+                    const d = new Date(filters.endDate);
+                    d.setDate(d.getDate() + 1);
+                    return d;
+                  })()
+                : undefined
             }
           : undefined,
       OR: filters.lawyerId

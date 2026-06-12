@@ -50,7 +50,7 @@ export function DocumentsPage() {
             placeholder="文件类型"
             style={{ width: 160 }}
             options={Object.entries(DocumentTypeLabels).map(([value, label]) => ({ value, label }))}
-            onChange={(fileType) => void fetchDocuments({ q: fileType })}
+            onChange={(fileType) => void fetchDocuments({ fileType })}
           />
         </Space>
       </div>

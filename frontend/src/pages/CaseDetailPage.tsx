@@ -38,7 +38,7 @@ export function CaseDetailPage() {
   async function removeDocument(documentId: string) {
     await documentApi.deleteDocument(documentId);
     message.success("文档已删除");
-    if (id) void fetchCase(documentId);
+    if (id) void fetchCase(id);
   }
 
   return (
