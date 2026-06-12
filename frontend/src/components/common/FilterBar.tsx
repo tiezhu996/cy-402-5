@@ -1,5 +1,7 @@
 import { Button, DatePicker, Select, Space } from "antd";
+import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
+import { useState } from "react";
 import type { CaseQuery } from "../../api/case";
 import type { User } from "../../types";
 import { CaseStatusLabels, CaseTypeLabels } from "../../types/enums";
@@ -13,7 +15,18 @@ export function FilterBar({
   users: User[];
   onChange: (query: CaseQuery) => void;
 }) {
-  const query: CaseQuery = {};
+  const [query, setQuery] = useState<CaseQuery>({});
+
+  function updateQuery(partial: Partial<CaseQuery>) {
+    const next = { ...query, ...partial };
+    setQuery(next);
+    onChange(next);
+  }
+
+  function handleReset() {
+    setQuery({});
+    onChange({});
+  }
 
   return (
     <div className="toolbar-band">
@@ -22,21 +35,17 @@ export function FilterBar({
           allowClear
           placeholder="案件类型"
           style={{ width: 140 }}
+          value={query.type}
           options={Object.entries(CaseTypeLabels).map(([value, label]) => ({ value, label }))}
-          onChange={(value) => {
-            query.type = value;
-            onChange({ ...query });
-          }}
+          onChange={(value) => updateQuery({ type: value })}
         />
         <Select
           allowClear
           placeholder="案件状态"
           style={{ width: 140 }}
+          value={query.status}
           options={Object.entries(CaseStatusLabels).map(([value, label]) => ({ value, label }))}
-          onChange={(value) => {
-            query.status = value;
-            onChange({ ...query });
-          }}
+          onChange={(value) => updateQuery({ status: value })}
         />
         <Select
           allowClear
@@ -44,20 +53,24 @@ export function FilterBar({
           optionFilterProp="label"
           placeholder="主办/协办律师"
           style={{ width: 180 }}
+          value={query.lawyerId}
           options={users.map((user) => ({ value: user.id, label: user.name }))}
-          onChange={(value) => {
-            query.lawyerId = value;
-            onChange({ ...query });
-          }}
+          onChange={(value) => updateQuery({ lawyerId: value })}
         />
         <DatePicker.RangePicker
+          value={
+            query.startDate && query.endDate
+              ? [dayjs(query.startDate), dayjs(query.endDate)]
+              : null
+          }
           onChange={(range: Range) => {
-            query.startDate = range?.[0]?.format("YYYY-MM-DD");
-            query.endDate = range?.[1]?.format("YYYY-MM-DD");
-            onChange({ ...query });
+            updateQuery({
+              startDate: range?.[0]?.format("YYYY-MM-DD"),
+              endDate: range?.[1]?.format("YYYY-MM-DD")
+            });
           }}
         />
-        <Button onClick={() => onChange({})}>重置</Button>
+        <Button onClick={handleReset}>重置</Button>
       </Space>
     </div>
   );
